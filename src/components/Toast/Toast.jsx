@@ -7,7 +7,7 @@ import {
   X,
 } from "react-feather";
 
-import VisuallyHidden from "../VisuallyHidden";
+import { ToastContext } from "../ToastProvider";
 
 import styles from "./Toast.module.css";
 
@@ -18,7 +18,9 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({ id, variant, handleDismissToast, children }) {
+function Toast({ id, variant, children }) {
+  const { dismissToast } = React.useContext(ToastContext);
+
   // Polymorphic component
   const Icon = ICONS_BY_VARIANT[variant];
 
@@ -28,9 +30,12 @@ function Toast({ id, variant, handleDismissToast, children }) {
         <Icon size={24} />
       </div>
       <p className={styles.content}>{children}</p>
-      <button className={styles.closeButton}>
-        <X size={24} onClick={() => handleDismissToast(id)} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
+      <button
+        className={styles.closeButton}
+        aria-label="Dismiss message"
+        aria-live="off"
+      >
+        <X size={24} onClick={() => dismissToast(id)} />
       </button>
     </div>
   );
