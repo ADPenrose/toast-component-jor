@@ -18,7 +18,7 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({ message, variant, handleCloseToast }) {
+function Toast({ id, variant, handleDismissToast, children }) {
   // Polymorphic component
   const Icon = ICONS_BY_VARIANT[variant];
 
@@ -27,9 +27,9 @@ function Toast({ message, variant, handleCloseToast }) {
       <div className={styles.iconContainer}>
         <Icon size={24} />
       </div>
-      <p className={styles.content}>{message}</p>
+      <p className={styles.content}>{children}</p>
       <button className={styles.closeButton}>
-        <X onClick={handleCloseToast} size={24} />
+        <X size={24} onClick={() => handleDismissToast(id)} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>

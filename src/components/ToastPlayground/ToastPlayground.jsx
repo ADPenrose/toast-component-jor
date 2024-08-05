@@ -1,7 +1,7 @@
 import React from "react";
 
 import Button from "../Button";
-import Toast from "../Toast";
+import ToastShelf from "../ToastShelf";
 
 import styles from "./ToastPlayground.module.css";
 import toastUrl from "../../assets/toast.png";
@@ -11,15 +11,31 @@ const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 function ToastPlayground() {
   const [message, setMessage] = React.useState("");
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
-  const [showToast, setShowToast] = React.useState(false);
+  const [toasts, setToasts] = React.useState([]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    setShowToast(true);
+    if (!message) {
+      return;
+    }
+    // I need to create a new array of toasts, set it as the new state, and then reset
+    // the message and variant state values.
+    const newToasts = [
+      ...toasts,
+      {
+        id: crypto.randomUUID(),
+        message,
+        variant,
+      },
+    ];
+    setToasts(newToasts);
+    setMessage("");
+    setVariant(VARIANT_OPTIONS[0]);
   }
 
-  function handleCloseToast() {
-    setShowToast(false);
+  function handleDismissToast(id) {
+    const newToasts = toasts.filter((toast) => toast.id !== id);
+    setToasts(newToasts);
   }
 
   return (
@@ -29,14 +45,8 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {/* TODO: Make this reactive! */}
-      {showToast && (
-        <Toast
-          message={message}
-          variant={variant}
-          handleCloseToast={handleCloseToast}
-        />
-      )}
+      {/* TODO: Implement working solution */}
+      <ToastShelf toasts={toasts} handleDismissToast={handleDismissToast} />
 
       <form
         className={styles.controlsWrapper}
